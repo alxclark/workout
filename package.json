@@ -1,0 +1,26 @@
+{
+  "name": "workout",
+  "version": "1.0.0",
+  "description": "👉 I gave [a talk](https://www.youtube.com/watch?v=x1FU3e0sT1I) to explain the principles I used to build this. I highly recommend watching it!",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alxclark/workout.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alxclark/workout/issues"
+  },
+  "homepage": "https://github.com/alxclark/workout#readme",
+  "dependencies": {
+    "elm-format": "^0.8.3",
+    "elm-test": "^0.19.1-revision2"
+  }
+}
