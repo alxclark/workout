@@ -1,7 +1,7 @@
 {
   "name": "workout",
   "version": "1.0.0",
-  "description": "👉 I gave [a talk](https://www.youtube.com/watch?v=x1FU3e0sT1I) to explain the principles I used to build this. I highly recommend watching it!",
+  "description": "Circuit training timer",
   "main": "index.js",
   "directories": {
     "test": "tests"
@@ -13,7 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/alxclark/workout.git"
   },
-  "author": "",
+  "author": "alxclark",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/alxclark/workout/issues"
