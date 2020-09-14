@@ -10,7 +10,7 @@ import Html.Attributes exposing (class)
 import Html.Styled as Styled exposing (..)
 import Html.Styled.Attributes exposing (..)
 import Html.Styled.Events exposing (onClick)
-import UI
+import UI exposing (button, wrapper)
 
 
 
@@ -36,10 +36,9 @@ view : Model -> Browser.Document Msg
 view _ =
     let
         content =
-            Styled.main_ []
-                [ Styled.text "Welcome to the home page"
-                , UI.button [] [ Styled.text "Click me" ]
-                , UI.button [] [ Styled.text "back" ]
+            UI.wrapper []
+                [ UI.button [] [ Styled.text "workout" ]
+                , UI.button [] [ Styled.text "settings" ]
                 ]
     in
     { title = "Home"

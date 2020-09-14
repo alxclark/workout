@@ -1,8 +1,8 @@
-module UI exposing (button)
+module UI exposing (button, wrapper)
 
 import Css exposing (..)
 import Html exposing (button)
-import Html.Styled as Styled exposing (Attribute, Html, button, styled)
+import Html.Styled as Styled exposing (Attribute, Html, button, div, styled)
 
 
 theme : { secondary : Color, primary : Color, subdued : Color }
@@ -29,4 +29,15 @@ button =
             , color theme.secondary
             , textDecoration underline
             ]
+        ]
+
+
+wrapper : List (Attribute msg) -> List (Html msg) -> Html msg
+wrapper =
+    styled div
+        [ padding (px 75)
+        , displayFlex
+        , flexDirection column
+        , height (vh 100)
+        , boxSizing borderBox
         ]
