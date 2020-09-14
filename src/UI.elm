@@ -17,7 +17,7 @@ theme =
 button : List (Attribute msg) -> List (Html msg) -> Html msg
 button =
     styled Styled.button
-        [ padding (px 40)
+        [ padding2 (px 30) (px 40)
         , backgroundColor theme.subdued
         , fontFamilies [ "Helvetica Neue" ]
         , fontStyle italic
@@ -41,6 +41,8 @@ wrapper =
         , flexDirection column
         , height (vh 100)
         , boxSizing borderBox
+        , justifyContent center
+        , alignItems center
         ]
 
 
