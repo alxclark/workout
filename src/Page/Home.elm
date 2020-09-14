@@ -5,8 +5,12 @@ module Page.Home exposing (Model, Msg, init, update, view)
 
 import Browser exposing (..)
 import Browser.Navigation as Nav
-import Html exposing (..)
+import Css exposing (..)
 import Html.Attributes exposing (class)
+import Html.Styled as Styled exposing (..)
+import Html.Styled.Attributes exposing (..)
+import Html.Styled.Events exposing (onClick)
+import UI
 
 
 
@@ -30,10 +34,16 @@ init navKey =
 
 view : Model -> Browser.Document Msg
 view _ =
+    let
+        content =
+            Styled.main_ []
+                [ Styled.text "Welcome to the home page"
+                , UI.button [] [ Styled.text "Click me" ]
+                , UI.button [] [ Styled.text "back" ]
+                ]
+    in
     { title = "Home"
-    , body =
-        [ text "Welcome to the home page"
-        ]
+    , body = [ Styled.toUnstyled content ]
     }
 
 
