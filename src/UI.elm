@@ -1,6 +1,7 @@
-module UI exposing (button, wrapper)
+module UI exposing (Spacing, button, stack, wrapper)
 
 import Css exposing (..)
+import Css.Global exposing (selector)
 import Html exposing (button)
 import Html.Styled as Styled exposing (Attribute, Html, button, div, styled)
 
@@ -41,3 +42,42 @@ wrapper =
         , height (vh 100)
         , boxSizing borderBox
         ]
+
+
+type Spacing
+    = Small
+    | Medium
+    | Large
+
+
+stack : Maybe Spacing -> List (Attribute msg) -> List (Html msg) -> Html msg
+stack spacing attributes children =
+    let
+        spacingPadding =
+            case spacing of
+                Just Small ->
+                    10
+
+                Just Medium ->
+                    40
+
+                Just Large ->
+                    80
+
+                Nothing ->
+                    40
+    in
+    styled div
+        [ displayFlex
+        , flexDirection column
+        ]
+        attributes
+        (List.map
+            (\child ->
+                styled div
+                    [ paddingTop (px spacingPadding), firstChild [ paddingTop (px 0) ] ]
+                    []
+                    [ child ]
+            )
+            children
+        )

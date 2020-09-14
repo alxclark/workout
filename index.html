@@ -8437,6 +8437,66 @@ var $author$project$UI$button = A2(
 					$rtfeldman$elm_css$Css$textDecoration($rtfeldman$elm_css$Css$underline)
 				]))
 		]));
+var $rtfeldman$elm_css$Css$row = {flexDirection: $rtfeldman$elm_css$Css$Structure$Compatible, flexDirectionOrWrap: $rtfeldman$elm_css$Css$Structure$Compatible, value: 'row'};
+var $rtfeldman$elm_css$Css$column = _Utils_update(
+	$rtfeldman$elm_css$Css$row,
+	{value: 'column'});
+var $rtfeldman$elm_css$Css$displayFlex = A2($rtfeldman$elm_css$Css$property, 'display', 'flex');
+var $rtfeldman$elm_css$Html$Styled$div = $rtfeldman$elm_css$Html$Styled$node('div');
+var $rtfeldman$elm_css$Css$firstChild = $rtfeldman$elm_css$Css$pseudoClass('first-child');
+var $rtfeldman$elm_css$Css$flexDirection = $rtfeldman$elm_css$Css$prop1('flex-direction');
+var $rtfeldman$elm_css$Css$paddingTop = $rtfeldman$elm_css$Css$prop1('padding-top');
+var $author$project$UI$stack = F3(
+	function (spacing, attributes, children) {
+		var spacingPadding = function () {
+			if (spacing.$ === 'Just') {
+				switch (spacing.a.$) {
+					case 'Small':
+						var _v1 = spacing.a;
+						return 10;
+					case 'Medium':
+						var _v2 = spacing.a;
+						return 40;
+					default:
+						var _v3 = spacing.a;
+						return 80;
+				}
+			} else {
+				return 40;
+			}
+		}();
+		return A4(
+			$rtfeldman$elm_css$Html$Styled$styled,
+			$rtfeldman$elm_css$Html$Styled$div,
+			_List_fromArray(
+				[
+					$rtfeldman$elm_css$Css$displayFlex,
+					$rtfeldman$elm_css$Css$flexDirection($rtfeldman$elm_css$Css$column)
+				]),
+			attributes,
+			A2(
+				$elm$core$List$map,
+				function (child) {
+					return A4(
+						$rtfeldman$elm_css$Html$Styled$styled,
+						$rtfeldman$elm_css$Html$Styled$div,
+						_List_fromArray(
+							[
+								$rtfeldman$elm_css$Css$paddingTop(
+								$rtfeldman$elm_css$Css$px(spacingPadding)),
+								$rtfeldman$elm_css$Css$firstChild(
+								_List_fromArray(
+									[
+										$rtfeldman$elm_css$Css$paddingTop(
+										$rtfeldman$elm_css$Css$px(0))
+									]))
+							]),
+						_List_Nil,
+						_List_fromArray(
+							[child]));
+				},
+				children));
+	});
 var $rtfeldman$elm_css$VirtualDom$Styled$Unstyled = function (a) {
 	return {$: 'Unstyled', a: a};
 };
@@ -8929,13 +8989,6 @@ var $rtfeldman$elm_css$VirtualDom$Styled$toUnstyled = function (vdom) {
 var $rtfeldman$elm_css$Html$Styled$toUnstyled = $rtfeldman$elm_css$VirtualDom$Styled$toUnstyled;
 var $rtfeldman$elm_css$Css$borderBox = {backgroundClip: $rtfeldman$elm_css$Css$Structure$Compatible, boxSizing: $rtfeldman$elm_css$Css$Structure$Compatible, value: 'border-box'};
 var $rtfeldman$elm_css$Css$boxSizing = $rtfeldman$elm_css$Css$prop1('box-sizing');
-var $rtfeldman$elm_css$Css$row = {flexDirection: $rtfeldman$elm_css$Css$Structure$Compatible, flexDirectionOrWrap: $rtfeldman$elm_css$Css$Structure$Compatible, value: 'row'};
-var $rtfeldman$elm_css$Css$column = _Utils_update(
-	$rtfeldman$elm_css$Css$row,
-	{value: 'column'});
-var $rtfeldman$elm_css$Css$displayFlex = A2($rtfeldman$elm_css$Css$property, 'display', 'flex');
-var $rtfeldman$elm_css$Html$Styled$div = $rtfeldman$elm_css$Html$Styled$node('div');
-var $rtfeldman$elm_css$Css$flexDirection = $rtfeldman$elm_css$Css$prop1('flex-direction');
 var $rtfeldman$elm_css$Css$height = $rtfeldman$elm_css$Css$prop1('height');
 var $rtfeldman$elm_css$Css$VhUnits = {$: 'VhUnits'};
 var $rtfeldman$elm_css$Css$vh = A2($rtfeldman$elm_css$Css$Internal$lengthConverter, $rtfeldman$elm_css$Css$VhUnits, 'vh');
@@ -8958,19 +9011,26 @@ var $author$project$Page$Home$view = function (_v0) {
 		_List_Nil,
 		_List_fromArray(
 			[
-				A2(
-				$author$project$UI$button,
+				A3(
+				$author$project$UI$stack,
+				$elm$core$Maybe$Nothing,
 				_List_Nil,
 				_List_fromArray(
 					[
-						$rtfeldman$elm_css$Html$Styled$text('workout')
-					])),
-				A2(
-				$author$project$UI$button,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$rtfeldman$elm_css$Html$Styled$text('settings')
+						A2(
+						$author$project$UI$button,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$rtfeldman$elm_css$Html$Styled$text('workout')
+							])),
+						A2(
+						$author$project$UI$button,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$rtfeldman$elm_css$Html$Styled$text('settings')
+							]))
 					]))
 			]));
 	return {

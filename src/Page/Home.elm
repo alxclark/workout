@@ -10,7 +10,7 @@ import Html.Attributes exposing (class)
 import Html.Styled as Styled exposing (..)
 import Html.Styled.Attributes exposing (..)
 import Html.Styled.Events exposing (onClick)
-import UI exposing (button, wrapper)
+import UI exposing (..)
 
 
 
@@ -37,8 +37,11 @@ view _ =
     let
         content =
             UI.wrapper []
-                [ UI.button [] [ Styled.text "workout" ]
-                , UI.button [] [ Styled.text "settings" ]
+                [ UI.stack Nothing
+                    []
+                    [ UI.button [] [ Styled.text "workout" ]
+                    , UI.button [] [ Styled.text "settings" ]
+                    ]
                 ]
     in
     { title = "Home"
@@ -59,3 +62,7 @@ update msg model =
     case msg of
         Home test ->
             ( { model | test = model.test + test }, Cmd.none )
+
+
+type Test2
+    = Osad (Html String)
