@@ -10,6 +10,7 @@ import Html.Attributes exposing (class)
 import Html.Styled as Styled exposing (..)
 import Html.Styled.Attributes exposing (..)
 import Html.Styled.Events exposing (onClick)
+import Route exposing (Route)
 import UI exposing (..)
 
 
@@ -39,8 +40,8 @@ view _ =
             UI.wrapper []
                 [ UI.stack Nothing
                     []
-                    [ UI.button [] [ Styled.text "workout" ]
-                    , UI.button [] [ Styled.text "settings" ]
+                    [ UI.button [ Route.href Route.Timer ] [ Styled.text "workout" ]
+                    , UI.button [ Route.href Route.Settings ] [ Styled.text "settings" ]
                     ]
                 ]
     in

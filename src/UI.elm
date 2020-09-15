@@ -2,8 +2,7 @@ module UI exposing (Spacing, button, stack, wrapper)
 
 import Css exposing (..)
 import Css.Global exposing (selector)
-import Html exposing (button)
-import Html.Styled as Styled exposing (Attribute, Html, button, div, styled)
+import Html.Styled as Styled exposing (Attribute, Html, a, div, styled)
 
 
 theme : { secondary : Color, primary : Color, subdued : Color }
@@ -16,7 +15,7 @@ theme =
 
 button : List (Attribute msg) -> List (Html msg) -> Html msg
 button =
-    styled Styled.button
+    styled Styled.a
         [ padding2 (px 30) (px 40)
         , backgroundColor theme.subdued
         , fontFamilies [ "Helvetica Neue" ]
@@ -24,7 +23,10 @@ button =
         , fontWeight bold
         , fontSize (px 35)
         , border (px 0)
+        , textDecoration none
+        , color theme.primary
         , cursor pointer
+        , display block
         , hover
             [ backgroundColor theme.primary
             , color theme.secondary
