@@ -11,6 +11,7 @@ import Html.Styled as Styled exposing (..)
 import Html.Styled.Attributes exposing (..)
 import Html.Styled.Events exposing (onClick)
 import Route exposing (Route)
+import Svg.Styled exposing (..)
 import UI exposing (..)
 
 
@@ -38,10 +39,14 @@ view _ =
     let
         content =
             UI.wrapper []
-                [ UI.stack Nothing
+                [ UI.stack UI.Large
                     []
-                    [ UI.button [ Route.href Route.Timer ] [ Styled.text "workout" ]
-                    , UI.button [ Route.href Route.Settings ] [ Styled.text "settings" ]
+                    [ dumbbell
+                    , UI.stack UI.Medium
+                        []
+                        [ UI.button [ Route.href Route.Timer ] [ Styled.text "workout" ]
+                        , UI.button [ Route.href Route.Settings ] [ Styled.text "settings" ]
+                        ]
                     ]
                 ]
     in
