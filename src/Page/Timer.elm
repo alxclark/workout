@@ -26,7 +26,7 @@ type alias Settings =
 
 
 type Stage
-    = Ready
+    = Done
     | Delay
     | Round
     | Rest
@@ -56,10 +56,10 @@ init : Nav.Key -> ( Model, Cmd Msg )
 init navKey =
     let
         settings =
-            { delay = 3, trainingDuration = 1, restDuration = 2, rounds = 5 }
+            { delay = 3, trainingDuration = 1, restDuration = 2, rounds = 1 }
 
         timer =
-            { time = settings.delay, round = 0, stage = Delay, phase = Paused }
+            { time = settings.delay, round = 1, stage = Delay, phase = Paused }
     in
     ( { settings = settings
       , timer = timer
@@ -102,6 +102,7 @@ type Msg
     | RoundEnded
     | DelayEnded
     | RestEnded
+    | WorkoutEnded
     | Idle
 
 
@@ -122,6 +123,9 @@ update msg model =
 
         RestEnded ->
             restEnded model
+
+        WorkoutEnded ->
+            workoutEnded model
 
         Idle ->
             ( model, Cmd.none )
@@ -147,6 +151,18 @@ restEnded model =
             model.timer
                 |> setStage Round
                 |> setTime model.settings.trainingDuration
+      }
+    , Cmd.none
+    )
+
+
+workoutEnded : Model -> ( Model, Cmd Msg )
+workoutEnded model =
+    ( { model
+        | timer =
+            model.timer
+                |> setStage Done
+                |> setPhase Paused
       }
     , Cmd.none
     )
@@ -208,18 +224,22 @@ runTimer model _ =
     case model.timer.phase of
         Playing ->
             if model.timer.time == 0 then
-                case model.timer.stage of
-                    Ready ->
-                        Idle
+                if model.timer.round == model.settings.rounds && model.timer.stage == Round then
+                    WorkoutEnded
 
-                    Delay ->
-                        DelayEnded
+                else
+                    case model.timer.stage of
+                        Done ->
+                            Idle
 
-                    Rest ->
-                        RestEnded
+                        Delay ->
+                            DelayEnded
 
-                    Round ->
-                        RoundEnded
+                        Rest ->
+                            RestEnded
+
+                        Round ->
+                            RoundEnded
 
             else
                 Decrement
