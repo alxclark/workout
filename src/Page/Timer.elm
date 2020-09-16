@@ -77,10 +77,11 @@ view model =
     let
         content =
             UI.wrapper []
-                [ UI.stack UI.Large
+                [ UI.stack UI.Small
                     []
                     [ p [] [ Styled.text "timer" ]
                     , p [] [ Styled.text (String.fromInt model.timer.time) ]
+                    , Styled.button [ onClick  ScreenPress] [ Styled.text "Start/Stop" ]
                     ]
                 ]
     in
@@ -94,19 +95,42 @@ view model =
 
 
 type Msg
-    = Decrement Time.Posix
+    = ScreenPress
+    | Decrement
+    | Idle
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Decrement _ ->
-            ( { model | timer = setTimer (model.timer.time - 1) model.timer }, Cmd.none )
+        Decrement ->
+            ( { model | timer = setTime (model.timer.time - 1) model.timer }, Cmd.none )
+
+        ScreenPress ->
+            screenPress model
+
+        Idle ->
+            ( model, Cmd.none )
 
 
-setTimer : Int -> Timer -> Timer
-setTimer newTime timer =
+screenPress : Model -> ( Model, Cmd Msg )
+screenPress model =
+    case model.timer.phase of
+        Paused ->
+            ( { model | timer = setPhase Playing model.timer }, Cmd.none )
+
+        Playing ->
+            ( { model | timer = setPhase Paused model.timer }, Cmd.none )
+
+
+setTime : Int -> Timer -> Timer
+setTime newTime timer =
     { timer | time = newTime }
+
+
+setPhase : Phase -> Timer -> Timer
+setPhase newPhase timer =
+    { timer | phase = newPhase }
 
 
 
@@ -115,4 +139,14 @@ setTimer newTime timer =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Time.every 1000 Decrement
+    Time.every 1000 (runTimer model)
+
+
+runTimer : Model -> Time.Posix -> Msg
+runTimer model _ =
+    case model.timer.phase of
+        Playing ->
+            Decrement
+
+        Paused ->
+            Idle
