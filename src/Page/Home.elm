@@ -1,8 +1,5 @@
 module Page.Home exposing (Model, Msg, init, update, view)
 
-{-| The homepage. You can get here via either the / or /#/ routes.
--}
-
 import Browser exposing (..)
 import Browser.Navigation as Nav
 import Css exposing (..)
@@ -68,7 +65,3 @@ update msg model =
     case msg of
         Home test ->
             ( { model | test = model.test + test }, Cmd.none )
-
-
-type Test2
-    = Osad (Html String)

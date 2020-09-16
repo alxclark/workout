@@ -5,6 +5,7 @@ import Browser.Navigation as Nav
 import Html exposing (..)
 import Page.Home as Home
 import Page.NotFound as NotFound
+import Page.Timer as Timer
 import Route exposing (Route)
 import Url exposing (Url)
 
@@ -19,6 +20,7 @@ import Url exposing (Url)
 
 type Model
     = Home Home.Model
+    | Timer Timer.Model
     | Redirect Nav.Key
     | NotFound Nav.Key
 
@@ -53,6 +55,9 @@ view model =
         Home home ->
             viewPage GotHomeMsg (Home.view home)
 
+        Timer timer ->
+            viewPage GotTimerMsg (Timer.view timer)
+
         NotFound _ ->
             NotFound.view
 
@@ -68,6 +73,7 @@ type Msg
     = ChangedUrl Url
     | ClickedLink Browser.UrlRequest
     | GotHomeMsg Home.Msg
+    | GotTimerMsg Timer.Msg
 
 
 toNavKey : Model -> Nav.Key
@@ -81,6 +87,9 @@ toNavKey page =
 
         Home home ->
             home.navKey
+
+        Timer timer ->
+            timer.navKey
 
 
 changeRouteTo : Maybe Route -> Model -> ( Model, Cmd Msg )
@@ -98,7 +107,9 @@ changeRouteTo maybeRoute model =
                 |> updateWith Home GotHomeMsg model
 
         Just Route.Timer ->
-            ( NotFound (toNavKey model), Cmd.none )
+            Timer.init
+                (toNavKey model)
+                |> updateWith Timer GotTimerMsg model
 
         Just Route.Settings ->
             ( NotFound (toNavKey model), Cmd.none )
@@ -126,6 +137,10 @@ update msg model =
             Home.update subMsg home
                 |> updateWith Home GotHomeMsg model
 
+        ( GotTimerMsg subMsg, Timer timer ) ->
+            Timer.update subMsg timer
+                |> updateWith Timer GotTimerMsg model
+
         ( _, _ ) ->
             -- Disregard messages that arrived for the wrong page.
             ( model, Cmd.none )
@@ -150,6 +165,9 @@ subscriptions model =
 
         Home _ ->
             Sub.none
+
+        Timer timer ->
+            Sub.map GotTimerMsg (Timer.subscriptions timer)
 
         Redirect _ ->
             Sub.none
