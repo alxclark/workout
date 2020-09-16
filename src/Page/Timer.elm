@@ -29,6 +29,7 @@ type Stage
     = Ready
     | Delay
     | Round
+    | Rest
 
 
 type Phase
@@ -55,10 +56,10 @@ init : Nav.Key -> ( Model, Cmd Msg )
 init navKey =
     let
         settings =
-            { delay = 5, trainingDuration = 5, restDuration = 5, rounds = 5 }
+            { delay = 3, trainingDuration = 1, restDuration = 2, rounds = 5 }
 
         timer =
-            { time = settings.trainingDuration, round = 0, stage = Ready, phase = Paused }
+            { time = settings.delay, round = 0, stage = Delay, phase = Paused }
     in
     ( { settings = settings
       , timer = timer
@@ -81,7 +82,8 @@ view model =
                     []
                     [ p [] [ Styled.text "timer" ]
                     , p [] [ Styled.text (String.fromInt model.timer.time) ]
-                    , Styled.button [ onClick  ScreenPress] [ Styled.text "Start/Stop" ]
+                    , Styled.button [ onClick ScreenPress ] [ Styled.text "Start/Stop" ]
+                    , p [] [ Styled.text ("Round " ++ String.fromInt model.timer.round ++ "/" ++ String.fromInt model.settings.rounds) ]
                     ]
                 ]
     in
@@ -97,6 +99,9 @@ view model =
 type Msg
     = ScreenPress
     | Decrement
+    | RoundEnded
+    | DelayEnded
+    | RestEnded
     | Idle
 
 
@@ -109,8 +114,54 @@ update msg model =
         ScreenPress ->
             screenPress model
 
+        RoundEnded ->
+            roundEnded model
+
+        DelayEnded ->
+            delayEnded model
+
+        RestEnded ->
+            restEnded model
+
         Idle ->
             ( model, Cmd.none )
+
+
+roundEnded : Model -> ( Model, Cmd Msg )
+roundEnded model =
+    ( { model
+        | timer =
+            model.timer
+                |> setRound (model.timer.round + 1)
+                |> setStage Rest
+                |> setTime model.settings.restDuration
+      }
+    , Cmd.none
+    )
+
+
+restEnded : Model -> ( Model, Cmd Msg )
+restEnded model =
+    ( { model
+        | timer =
+            model.timer
+                |> setStage Round
+                |> setTime model.settings.trainingDuration
+      }
+    , Cmd.none
+    )
+
+
+delayEnded : Model -> ( Model, Cmd Msg )
+delayEnded model =
+    ( { model
+        | timer =
+            model.timer
+                |> setStage Round
+                |> setTime model.settings.trainingDuration
+      }
+    , Cmd.none
+    )
 
 
 screenPress : Model -> ( Model, Cmd Msg )
@@ -126,6 +177,16 @@ screenPress model =
 setTime : Int -> Timer -> Timer
 setTime newTime timer =
     { timer | time = newTime }
+
+
+setStage : Stage -> Timer -> Timer
+setStage newState timer =
+    { timer | stage = newState }
+
+
+setRound : Int -> Timer -> Timer
+setRound newRound timer =
+    { timer | round = newRound }
 
 
 setPhase : Phase -> Timer -> Timer
@@ -146,7 +207,22 @@ runTimer : Model -> Time.Posix -> Msg
 runTimer model _ =
     case model.timer.phase of
         Playing ->
-            Decrement
+            if model.timer.time == 0 then
+                case model.timer.stage of
+                    Ready ->
+                        Idle
+
+                    Delay ->
+                        DelayEnded
+
+                    Rest ->
+                        RestEnded
+
+                    Round ->
+                        RoundEnded
+
+            else
+                Decrement
 
         Paused ->
             Idle

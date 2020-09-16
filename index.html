@@ -5289,11 +5289,11 @@ var $author$project$Page$Home$init = function (navKey) {
 		{navKey: navKey, test: 5},
 		$elm$core$Platform$Cmd$none);
 };
+var $author$project$Page$Timer$Delay = {$: 'Delay'};
 var $author$project$Page$Timer$Paused = {$: 'Paused'};
-var $author$project$Page$Timer$Ready = {$: 'Ready'};
 var $author$project$Page$Timer$init = function (navKey) {
-	var settings = {delay: 5, restDuration: 5, rounds: 5, trainingDuration: 5};
-	var timer = {phase: $author$project$Page$Timer$Paused, round: 0, stage: $author$project$Page$Timer$Ready, time: settings.trainingDuration};
+	var settings = {delay: 3, restDuration: 2, rounds: 5, trainingDuration: 1};
+	var timer = {phase: $author$project$Page$Timer$Paused, round: 0, stage: $author$project$Page$Timer$Delay, time: settings.delay};
 	return _Utils_Tuple2(
 		{navKey: navKey, settings: settings, timer: timer},
 		$elm$core$Platform$Cmd$none);
@@ -6400,12 +6400,29 @@ var $elm$time$Time$every = F2(
 			A2($elm$time$Time$Every, interval, tagger));
 	});
 var $author$project$Page$Timer$Decrement = {$: 'Decrement'};
+var $author$project$Page$Timer$DelayEnded = {$: 'DelayEnded'};
 var $author$project$Page$Timer$Idle = {$: 'Idle'};
+var $author$project$Page$Timer$RestEnded = {$: 'RestEnded'};
+var $author$project$Page$Timer$RoundEnded = {$: 'RoundEnded'};
 var $author$project$Page$Timer$runTimer = F2(
 	function (model, _v0) {
 		var _v1 = model.timer.phase;
 		if (_v1.$ === 'Playing') {
-			return $author$project$Page$Timer$Decrement;
+			if (!model.timer.time) {
+				var _v2 = model.timer.stage;
+				switch (_v2.$) {
+					case 'Ready':
+						return $author$project$Page$Timer$Idle;
+					case 'Delay':
+						return $author$project$Page$Timer$DelayEnded;
+					case 'Rest':
+						return $author$project$Page$Timer$RestEnded;
+					default:
+						return $author$project$Page$Timer$RoundEnded;
+				}
+			} else {
+				return $author$project$Page$Timer$Decrement;
+			}
 		} else {
 			return $author$project$Page$Timer$Idle;
 		}
@@ -6487,6 +6504,65 @@ var $author$project$Page$Home$update = F2(
 				{test: model.test + test}),
 			$elm$core$Platform$Cmd$none);
 	});
+var $author$project$Page$Timer$Round = {$: 'Round'};
+var $author$project$Page$Timer$setStage = F2(
+	function (newState, timer) {
+		return _Utils_update(
+			timer,
+			{stage: newState});
+	});
+var $author$project$Page$Timer$setTime = F2(
+	function (newTime, timer) {
+		return _Utils_update(
+			timer,
+			{time: newTime});
+	});
+var $author$project$Page$Timer$delayEnded = function (model) {
+	return _Utils_Tuple2(
+		_Utils_update(
+			model,
+			{
+				timer: A2(
+					$author$project$Page$Timer$setTime,
+					model.settings.trainingDuration,
+					A2($author$project$Page$Timer$setStage, $author$project$Page$Timer$Round, model.timer))
+			}),
+		$elm$core$Platform$Cmd$none);
+};
+var $author$project$Page$Timer$restEnded = function (model) {
+	return _Utils_Tuple2(
+		_Utils_update(
+			model,
+			{
+				timer: A2(
+					$author$project$Page$Timer$setTime,
+					model.settings.trainingDuration,
+					A2($author$project$Page$Timer$setStage, $author$project$Page$Timer$Round, model.timer))
+			}),
+		$elm$core$Platform$Cmd$none);
+};
+var $author$project$Page$Timer$Rest = {$: 'Rest'};
+var $author$project$Page$Timer$setRound = F2(
+	function (newRound, timer) {
+		return _Utils_update(
+			timer,
+			{round: newRound});
+	});
+var $author$project$Page$Timer$roundEnded = function (model) {
+	return _Utils_Tuple2(
+		_Utils_update(
+			model,
+			{
+				timer: A2(
+					$author$project$Page$Timer$setTime,
+					model.settings.restDuration,
+					A2(
+						$author$project$Page$Timer$setStage,
+						$author$project$Page$Timer$Rest,
+						A2($author$project$Page$Timer$setRound, model.timer.round + 1, model.timer)))
+			}),
+		$elm$core$Platform$Cmd$none);
+};
 var $author$project$Page$Timer$Playing = {$: 'Playing'};
 var $author$project$Page$Timer$setPhase = F2(
 	function (newPhase, timer) {
@@ -6514,12 +6590,6 @@ var $author$project$Page$Timer$screenPress = function (model) {
 			$elm$core$Platform$Cmd$none);
 	}
 };
-var $author$project$Page$Timer$setTime = F2(
-	function (newTime, timer) {
-		return _Utils_update(
-			timer,
-			{time: newTime});
-	});
 var $author$project$Page$Timer$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
@@ -6533,6 +6603,12 @@ var $author$project$Page$Timer$update = F2(
 					$elm$core$Platform$Cmd$none);
 			case 'ScreenPress':
 				return $author$project$Page$Timer$screenPress(model);
+			case 'RoundEnded':
+				return $author$project$Page$Timer$roundEnded(model);
+			case 'DelayEnded':
+				return $author$project$Page$Timer$delayEnded(model);
+			case 'RestEnded':
+				return $author$project$Page$Timer$restEnded(model);
 			default:
 				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 		}
@@ -9773,6 +9849,14 @@ var $author$project$Page$Timer$view = function (model) {
 						_List_fromArray(
 							[
 								$rtfeldman$elm_css$Html$Styled$text('Start/Stop')
+							])),
+						A2(
+						$rtfeldman$elm_css$Html$Styled$p,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$rtfeldman$elm_css$Html$Styled$text(
+								'Round ' + ($elm$core$String$fromInt(model.timer.round) + ('/' + $elm$core$String$fromInt(model.settings.rounds))))
 							]))
 					]))
 			]));
