@@ -41,8 +41,8 @@ view _ =
                     [ dumbbell
                     , UI.stack UI.Medium
                         []
-                        [ UI.button [ Route.href Route.Timer ] [ Styled.text "workout" ]
-                        , UI.button [ Route.href Route.Settings ] [ Styled.text "settings" ]
+                        [ UI.link [ Route.href Route.Timer ] [ Styled.text "workout" ]
+                        , UI.link [ Route.href Route.Settings ] [ Styled.text "settings" ]
                         ]
                     ]
                 ]

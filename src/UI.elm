@@ -1,4 +1,4 @@
-module UI exposing (Spacing(..), button, dumbbell, stack, wrapper)
+module UI exposing (Spacing(..), dumbbell, link, stack, wrapper)
 
 import Css exposing (..)
 import Html.Styled as Styled exposing (Attribute, Html, a, div, styled)
@@ -14,13 +14,11 @@ theme =
     }
 
 
-button : List (Attribute msg) -> List (Html msg) -> Html msg
-button =
+link : List (Attribute msg) -> List (Html msg) -> Html msg
+link =
     Styled.styled Styled.a
         [ padding2 (px 30) (px 40)
-        , backgroundColor theme.subdued
         , fontFamilies [ "Helvetica Neue" ]
-        , fontStyle italic
         , fontWeight bold
         , fontSize (px 35)
         , border (px 0)
@@ -29,9 +27,7 @@ button =
         , cursor pointer
         , display block
         , hover
-            [ backgroundColor theme.primary
-            , color theme.secondary
-            , textDecoration underline
+            [ textDecoration underline
             ]
         ]
 
