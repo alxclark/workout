@@ -3,6 +3,7 @@ module Page.Timer exposing (Model, Msg, init, subscriptions, update, view)
 import Browser exposing (..)
 import Browser.Navigation as Nav
 import Css exposing (..)
+import Css.Global exposing (everything, global)
 import Html.Attributes exposing (class)
 import Html.Styled as Styled exposing (..)
 import Html.Styled.Attributes exposing (..)
@@ -32,16 +33,11 @@ type Stage
     | Rest
 
 
-type Phase
-    = Paused
-    | Playing
-
-
 type alias Timer =
     { time : Int
     , round : Int
     , stage : Stage
-    , phase : Phase
+    , phase : TimerPhase
     }
 
 
@@ -77,14 +73,16 @@ view : Model -> Browser.Document Msg
 view model =
     let
         content =
-            UI.wrapper []
-                [ UI.stack UI.Small
-                    []
-                    [ p [] [ Styled.text "timer" ]
-                    , p [] [ Styled.text (String.fromInt model.timer.time) ]
-                    , Styled.button [ onClick ScreenPress ] [ Styled.text "Start/Stop" ]
-                    , p [] [ Styled.text ("Round " ++ String.fromInt model.timer.round ++ "/" ++ String.fromInt model.settings.rounds) ]
+            UI.timerWrapper [ onClick ScreenPress ]
+                [ global
+                    [ everything
+                        [ fontFamilies [ "Helvetica Neue" ]
+                        ]
                     ]
+                , UI.roundsCount model.timer.round model.settings.rounds
+                , p [] [ Styled.text "Stop" ]
+                , UI.timer model.timer.time Paused
+                , p [] [ Styled.text "Start" ]
                 ]
     in
     { title = "Timer"
@@ -205,7 +203,7 @@ setRound newRound timer =
     { timer | round = newRound }
 
 
-setPhase : Phase -> Timer -> Timer
+setPhase : TimerPhase -> Timer -> Timer
 setPhase newPhase timer =
     { timer | phase = newPhase }
 

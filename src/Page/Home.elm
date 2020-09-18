@@ -3,6 +3,7 @@ module Page.Home exposing (Model, Msg, init, update, view)
 import Browser exposing (..)
 import Browser.Navigation as Nav
 import Css exposing (..)
+import Css.Global exposing (..)
 import Html.Attributes exposing (class)
 import Html.Styled as Styled exposing (..)
 import Html.Styled.Attributes exposing (..)
@@ -36,7 +37,12 @@ view _ =
     let
         content =
             UI.wrapper []
-                [ UI.stack UI.Large
+                [ global
+                    [ everything
+                        [ fontFamilies [ "Helvetica Neue" ]
+                        ]
+                    ]
+                , UI.stack UI.Large
                     []
                     [ dumbbell
                     , UI.stack UI.Medium
