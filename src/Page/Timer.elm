@@ -73,17 +73,30 @@ view : Model -> Browser.Document Msg
 view model =
     let
         content =
-            UI.timerWrapper [ onClick ScreenPress ]
-                [ global
-                    [ everything
-                        [ fontFamilies [ "Helvetica Neue" ]
+            let
+                bottomText =
+                    case model.timer.phase of
+                        Paused ->
+                            "stop"
+
+                        Playing ->
+                            "pause"
+            in
+            if model.timer.stage == Done then
+                p [] [ Styled.text (String.fromInt model.settings.rounds ++ " rounds completed 🎉") ]
+
+            else
+                UI.timerWrapper [ onClick ScreenPress ]
+                    [ global
+                        [ everything
+                            [ fontFamilies [ "Helvetica Neue" ]
+                            ]
                         ]
+                    , UI.roundsCount model.timer.round model.settings.rounds
+                    , p [] []
+                    , UI.timer model.timer.time model.timer.phase
+                    , Styled.styled p [ color UI.theme.accent, fontSize (px 35), fontWeight (int 500), letterSpacing (px 2) ] [] [ Styled.text bottomText ]
                     ]
-                , UI.roundsCount model.timer.round model.settings.rounds
-                , p [] [ Styled.text "Stop" ]
-                , UI.timer model.timer.time Paused
-                , p [] [ Styled.text "Start" ]
-                ]
     in
     { title = "Timer"
     , body = [ Styled.toUnstyled content ]

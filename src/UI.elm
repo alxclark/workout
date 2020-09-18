@@ -1,4 +1,4 @@
-module UI exposing (Spacing(..), TimerPhase(..), dumbbell, link, roundsCount, stack, timer, timerWrapper, wrapper)
+module UI exposing (Spacing(..), TimerPhase(..), dumbbell, link, roundsCount, stack, theme, timer, timerWrapper, wrapper)
 
 import Css exposing (..)
 import Html.Attributes exposing (width)
@@ -139,6 +139,21 @@ timer time phase =
 
         formattedTime =
             leftSide ++ ":" ++ rightSide
+
+        clocks =
+            let
+                timeClock =
+                    [ Styled.styled p [ color theme.primary, fontWeight bold, fontSize (px 90) ] [] [ text formattedTime ] ]
+
+                pausedClock =
+                    [ Styled.styled p [ color theme.primary, fontWeight bold, fontSize (px 58) ] [] [ text "paused" ] ]
+            in
+            case phase of
+                Paused ->
+                    pausedClock
+
+                Playing ->
+                    timeClock
     in
     Styled.styled div
         [ Css.width (px 320)
@@ -151,7 +166,7 @@ timer time phase =
         , alignItems center
         ]
         []
-        [ Styled.styled p [ color theme.primary, fontWeight bold, fontSize (px 90) ] [] [ text formattedTime ] ]
+        clocks
 
 
 roundsCount : Int -> Int -> Html msg
