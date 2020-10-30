@@ -1,4 +1,4 @@
-# Workout
+# Workout 🚧
 
 A simple timer for circuit training made with ❤️ and elm.
 
