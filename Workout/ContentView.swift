@@ -17,9 +17,6 @@ struct ContentView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(workout.name)
                             .font(.headline)
-                        Text(workout.type.rawValue)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
                         Text("\(workout.exercises.count) exercises")
                             .font(.caption)
                             .foregroundColor(.secondary)
