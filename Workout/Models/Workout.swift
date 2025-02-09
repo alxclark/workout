@@ -1,5 +1,17 @@
 import Foundation
 
+struct Program: Identifiable {
+    let id: UUID
+    var name: String
+    var workouts: [Workout]
+    
+    init(id: UUID = UUID(), name: String, workouts: [Workout] = []) {
+        self.id = id
+        self.name = name
+        self.workouts = workouts
+    }
+}
+
 struct Workout: Identifiable {
     let id: UUID
     var name: String

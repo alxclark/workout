@@ -12,7 +12,7 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            List(viewModel.workouts) { workout in
+            List(viewModel.programs[0].workouts) { workout in
                 NavigationLink(destination: Text("Workout Detail View - Coming Soon")) {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(workout.name)
