@@ -25,13 +25,6 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("My Workouts")
-            .toolbar {
-                Button(action: {
-                    // Add workout functionality coming soon
-                }) {
-                    Image(systemName: "plus")
-                }
-            }
         }
     }
 }
